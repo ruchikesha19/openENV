@@ -190,7 +190,7 @@ docker run adaptive-agent
 
 ---
 
-# 📊 Results
+#  Results
 
 * Agent adapts learning strategy dynamically
 * Handles multiple student types
