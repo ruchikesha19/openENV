@@ -104,13 +104,13 @@ class CurriculumEnv:
         idx = min(self.current_concept, self.num_concepts - 1)
         mastery = self.concept_mastery[idx]
 
-        if mastery >= 0.65:
+        if mastery >= 0.6:
             self.quiz_accuracy = mastery
             self.current_concept += 1
             self.attempt_count = 0
-            return 15
+            return 12
         else:
-            self.concept_mastery[idx] += 0.08
+            self.concept_mastery[idx] += 0.1
             self.concept_mastery[idx] = min(1.0, self.concept_mastery[idx])
             return -1
 

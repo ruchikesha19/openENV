@@ -1,3 +1,6 @@
+
+title: Curriculum OpenEnv Agent
+sdk: docker
 # 📘 Adaptive Curriculum Learning Agent (OpenEnv)
 
 ## 🚀 Overview

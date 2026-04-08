@@ -1,9 +1,43 @@
-FROM python:3.10
+# name: adaptive_learning_env
 
-WORKDIR /app
+# observation_space:
+#   concept_mastery: list
+#   quiz_accuracy: float
+#   time_spent: int
+#   fatigue: float
+#   engagement: float
 
-COPY . /app
+# action_space:
+#   - show_video
+#   - give_quiz
+#   - interactive_exercise
+#   - revision_notes
+#   - skip_topic
+#   - take_break
 
-RUN pip install --no-cache-dir -r requirements.txt
+# reward_range: [-20, 20]
 
-CMD ["python", "inference.py"]
+name: curriculum-env
+version: 1.0.0
+
+environment:
+  entrypoint: env.curriculum_env:CurriculumEnv
+
+observation_space:
+  type: object
+  properties:
+    state:
+      type: object
+
+action_space:
+  type: object
+  properties:
+    action:
+      type: string
+
+reward:
+  type: float
+  range: [-10.0, 10.0]
+
+metadata:
+  description: Adaptive curriculum learning environment

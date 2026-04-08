@@ -76,12 +76,19 @@ class AdaptiveLearningEnv:
             quiz_score = max(0.0, min(1.0, accuracy + noise))
 
             self.state_data["quiz_accuracy"] = quiz_score
+            avg_mastery = sum(self.state_data["concept_mastery"]) / self.num_concepts
 
-            if quiz_score > 0.7:
-                reward += 1.0
+            if avg_mastery < 0.5:
+                reward -= 1.0   # 🚨 punish early quiz HARD
+
+            elif quiz_score > 0.75:
+                reward += 2.0   # 🎯 strong reward
+
+            elif quiz_score > 0.6:
+                reward += 0.5
+
             else:
                 reward -= 0.5
-
         elif action_type == "revision_notes":
 
             gain = random.uniform(0.02, 0.06) * self.learning_rate
@@ -114,11 +121,14 @@ class AdaptiveLearningEnv:
 
         return self.state(), Reward(value=reward), done, {}
 
-    def _improve_mastery(self, gain):
+def _improve_mastery(self, gain):
 
-        concept = random.randint(0, self.num_concepts - 1)
+    concept = random.randint(0, self.num_concepts - 1)
 
-        self.state_data["concept_mastery"][concept] = min(
-            1.0,
-            self.state_data["concept_mastery"][concept] + gain
-        )
+    before = self.state_data["concept_mastery"][concept]
+
+    after = min(1.0, before + gain)
+
+    self.state_data["concept_mastery"][concept] = after
+
+    return after - before  # 🔥 return actual improvement

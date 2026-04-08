@@ -10,3 +10,5 @@ __pycache__/
 
 # Env files (if any secrets)
 .env
+
+
