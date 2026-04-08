@@ -1,168 +1,248 @@
+# Adaptive Learning Agent (OpenEnv)
 
-title: Curriculum OpenEnv Agent
-sdk: docker
-# 📘 Adaptive Curriculum Learning Agent (OpenEnv)
-
-## 🚀 Overview
-
-This project implements a **baseline reinforcement learning-style agent** for an adaptive learning environment. The agent dynamically selects learning actions (videos, exercises, quizzes, etc.) based on student state (mastery, fatigue, engagement) to maximize learning efficiency.
-
-The system includes:
-
-* 🎯 **Baseline Agent** – Adaptive decision-making policy
-* 📊 **Evaluation System** – Deterministic scoring across difficulty levels
-* 🧠 **Curriculum Environment** – Simulated student learning dynamics
+An **Agentic AI system using Reinforcement Learning** that dynamically personalizes learning paths for students based on their performance, engagement, and behavior.
 
 ---
 
-## 🧠 Problem Statement
+#  Problem Statement
 
-Design an intelligent agent that:
+Traditional learning systems follow a **static, one-size-fits-all approach**, leading to:
 
-* Adapts to student mastery levels
-* Avoids repetitive failures and loops
-* Handles fatigue and engagement
-* Completes concepts efficiently within limited steps
-
----
-
-## ⚙️ Features
-
-### ✅ Baseline Agent
-
-* Mastery-driven decision making
-* Fatigue-aware (takes breaks when needed)
-* Engagement-aware (adjusts learning strategy)
-* Quiz-gated progression (ensures understanding before moving forward)
-* Prevents infinite loops and inefficient actions
-
-### 📊 Evaluation Metrics
-
-The agent is evaluated using:
-
-* **Learning Gain** = Final Mastery − Initial Mastery
-* **Completion Rate** = Concepts Completed / Total Concepts
-* **Efficiency** = 1 / Steps Taken
-
-### 🧮 Final Score Formula
-
-```
-score = 0.5 * learning_gain + 0.3 * completion_rate + 0.2 * efficiency
-```
-
-* Score is clamped between **0.0 and 1.0**
-* Fully deterministic (no randomness in evaluation)
+* Low engagement 
+* Inefficient learning 
+* Lack of personalization 
 
 ---
 
-## 🧪 Evaluation Setup
+#  Solution
 
-The agent is tested on three student types:
+We built an **Adaptive Curriculum Environment** where an AI agent:
 
-| Difficulty | Description                  |
-| ---------- | ---------------------------- |
-| Easy       | Fast learner, low fatigue    |
-| Medium     | Balanced learner             |
-| Hard       | Slow learner, higher fatigue |
-
----
-
-## 📈 Results
-
-```
-Easy   → Score: 0.998
-Medium → Score: 0.984
-Hard   → Score: 0.898
-```
-
-### ✔ Performance Summary
-
-* Easy & Medium: **Full success**
-* Hard: **Strong partial success**
-* High efficiency and learning gain across all scenarios
+* Observes student learning state
+* Decides the next best action
+* Learns from rewards and feedback
+* Optimizes long-term learning outcomes
 
 ---
 
-## 🏗️ Project Structure
+# System Architecture
 
+```text
+Student State → Agent → Action → Environment → Reward → Next State
 ```
-openENV/
-│
-├── agents/
-│   └── baseline_agent.py
-│
+
+###  Components
+
+* **Environment (`env/curriculum_env.py`)**
+
+  * Simulates student learning behavior
+
+* **Agent (`agents/baseline_agent.py`)**
+
+  * Selects optimal learning actions
+
+* **Grader (`grader/evaluator.py`)**
+
+  * Evaluates agent performance across difficulty levels
+
+* **Inference (`inference.py`)**
+
+  * Runs the agent in the environment and logs results
+
+* **Schemas (`schemas.py`)**
+
+  * Defines structured observation, action, and reward models
+
+---
+
+#  Action Space
+
+The agent can perform:
+
+*  show_video
+*  give_quiz
+*  interactive_exercise
+*  revision_notes
+* skip_topic
+*  take_break
+
+---
+
+# Observation Space
+
+The agent observes:
+
+* concept_mastery (list of floats)
+* quiz_accuracy
+* time_spent
+* attempt_count
+* fatigue
+* engagement
+
+---
+
+#  Tasks & Evaluation
+
+We simulate 3 types of learners:
+
+| Difficulty | Description     |
+| ---------- | --------------- |
+| Easy       | Fast learner    |
+| Medium     | Average learner |
+| Hard       | Slow learner    |
+
+###  Evaluation Metrics
+
+```text
+score = 0.5 * learning_gain
+      + 0.3 * completion_rate
+      + 0.2 * efficiency
+```
+
+---
+
+#  Sample Output (Inference)
+
+```text
+[START] task=adaptive_learning env=openenv model=baseline
+
+[STEP] step=1 action=show_video reward=5.00 done=false error=null
+[STEP] step=2 action=interactive_exercise reward=6.00 done=false error=null
+[STEP] step=3 action=give_quiz reward=12.00 done=false error=null
+
+...
+
+[END] success=true steps=12 rewards=5.00,6.00,12.00,...
+```
+
+---
+
+#  Project Structure
+
+```bash
+.
 ├── env/
 │   └── curriculum_env.py
-│
+├── agents/
+│   └── baseline_agent.py
 ├── grader/
 │   └── evaluator.py
-│
-└── README.md
+├── config/
+├── inference.py
+├── app.py
+├── openenv.yaml
+├── requirements.txt
+├── Dockerfile
+├── schemas.py
+├── README.md
 ```
 
 ---
 
-## ▶️ How to Run
+#  How to Run
 
-### 1. Activate Virtual Environment
+### 1️ Install dependencies
 
+```bash
+pip install -r requirements.txt
 ```
-venv\Scripts\activate
-```
 
-### 2. Run Evaluation
+---
 
-```
-python grader/evaluator.py
+### 2️ Run inference
+
+```bash
 python inference.py
-
 ```
 
 ---
 
-## 🧠 Agent Strategy
+### 3️ Run evaluation
 
-The agent follows a **threshold-based curriculum policy**:
-
-* 📉 Low mastery → `show_video`
-* 📈 Medium mastery → `interactive_exercise`
-* 🎯 High mastery → `give_quiz`
-* 😴 High fatigue → `take_break`
-
-This ensures:
-
-* Efficient learning progression
-* Reduced unnecessary actions
-* Faster concept completion
+```bash
+python grader/evaluator.py
+```
 
 ---
 
-## 🔒 Determinism
+#  Docker Setup
 
-* Evaluation is fully deterministic
-* No randomness in scoring
-* Ensures reproducibility and fair comparison
+### Build
 
----
+```bash
+docker build -t adaptive-agent .
+```
 
-## 🚀 Future Improvements
+### Run
 
-* 🔁 Reinforcement Learning (Q-Learning / PPO)
-* 📊 Learning curve visualization
-* 🤖 Personalized curriculum generation
-* 🧾 Explainable AI (action reasoning)
-
----
-
-## 🏁 Conclusion
-
-This project demonstrates an effective **adaptive learning agent** that:
-
-* Maximizes learning efficiency
-* Adapts dynamically to student behavior
-* Achieves near-optimal performance across varying difficulty levels
-
+```bash
+docker run adaptive-agent
+```
 
 ---
 
+#  OpenEnv Compliance
+
+* ✔ Implements `step()`, `reset()`, `state()`
+* ✔ Structured schemas using `schemas.py`
+* ✔ `openenv.yaml` configured
+* ✔ Compatible with OpenEnv validation
+
+---
+
+# 📊 Results
+
+* Agent adapts learning strategy dynamically
+* Handles multiple student types
+* Demonstrates real-world decision-making
+
+---
+
+# Team Contributions
+
+* **P A Mannaswini**
+  Designed environment, reward system, and student simulation
+
+* **Ruchikesha**
+  Built adaptive agent and evaluation logic
+
+* **Sakthi Rishikesh**
+  Implemented OpenEnv compliance, inference pipeline, and Docker setup
+
+---
+
+#  Key Highlights
+
+* Agentic AI using Reinforcement Learning
+* Real-world EdTech application
+* Adaptive decision-making system
+* OpenEnv-compatible environment
+* Fully containerized (Docker-ready)
+
+---
+
+#  Future Improvements
+
+* Add interactive UI (Gradio)
+* Deploy on Hugging Face Spaces
+* Integrate real student datasets
+* Train advanced RL models
+
+---
+
+# Tech Stack
+
+* Python
+* NumPy
+* OpenEnv
+* Pydantic
+* Docker
+
+---
+
+# 🏁 Conclusion
+
+This project demonstrates how **AI agents can autonomously optimize learning experiences**, making education more personalized, scalable, and efficient.
+
+---
 
