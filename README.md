@@ -111,6 +111,8 @@ venv\Scripts\activate
 
 ```
 python grader/evaluator.py
+python inference.py
+
 ```
 
 ---
