@@ -1,3 +1,15 @@
+---
+title: OpenEnv - Adaptive Learning Environment
+emoji: 🚀
+colorFrom: '#FFD700'
+colorTo: '#FFA500'
+sdk: fastapi
+sdk_version: "0.104.1"
+python_version: "3.10.13"
+app_file: app.py
+pinned: false
+---
+
 # OpenEnv - Adaptive Learning Environment
 
 ## Installation
