@@ -11,7 +11,7 @@ from agents.baseline_agent import baseline_agent
 
 API_BASE_URL = os.getenv("API_BASE_URL")
 MODEL_NAME = os.getenv("MODEL_NAME", "baseline")
-HF_TOKEN = os.getenv("HF_TOKEN")
+API_KEY = os.getenv("API_KEY") or os.getenv("HF_TOKEN")
 LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 
 
@@ -20,8 +20,8 @@ def main():
     env_name = "openenv"
 
     client = OpenAI(
-        base_url=API_BASE_URL,
-        api_key=HF_TOKEN,
+        base_url=os.environ["API_BASE_URL"],
+        api_key=os.environ["API_KEY"],
     )
 
     env = OpenEnvWrapper(CurriculumEnv())
