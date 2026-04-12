@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Dict, Any
-import json
-import uuid
+import os
 
 app = FastAPI()
 
@@ -29,11 +28,11 @@ def get_env():
     return env_instance
 
 @app.get("/")
-async def root():
+def root():
     return {"message": "OpenEnv Server is running"}
 
 @app.post("/reset")
-async def reset():
+def reset():
     try:
         env = get_env()
         obs = env.reset()
@@ -46,7 +45,7 @@ async def reset():
         return {"error": str(e)}
 
 @app.post("/step")
-async def step(action: Action):
+def step(action: Action):
     try:
         env = get_env()
         obs, reward, done, info = env.step(action)
