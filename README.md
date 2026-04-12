@@ -2,7 +2,7 @@
 title: OpenEnv - Adaptive Learning Environment
 emoji: 🚀
 colorFrom: blue
-colorTo: indigo
+colorTo: green
 sdk: docker
 sdk_version: "0.104.1"
 python_version: "3.10.13"
