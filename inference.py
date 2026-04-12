@@ -12,6 +12,7 @@ from agents.baseline_agent import baseline_agent
 API_BASE_URL = os.getenv("API_BASE_URL")
 MODEL_NAME = os.getenv("MODEL_NAME", "baseline")
 HF_TOKEN = os.getenv("HF_TOKEN")
+LOCAL_IMAGE_NAME = os.getenv("LOCAL_IMAGE_NAME")
 
 
 def main():
@@ -59,12 +60,16 @@ def main():
 
         step_count += 1
 
-    success = all(r > 0 for r in rewards)
+    # Calculate score as average reward normalized to [0,1]
+    score = sum(rewards) / len(rewards) if rewards else 0.0
+    score = min(max(score / 10.0, 0.0), 1.0)  # Normalize assuming max reward per step is 10.0
+    
+    success = score >= 0.1  # Success threshold as in sample
 
     rewards_str = ",".join([f"{r:.2f}" for r in rewards])
 
     print(
-        f"[END] success={str(success).lower()} steps={step_count} rewards={rewards_str}"
+        f"[END] success={str(success).lower()} steps={step_count} score={score:.3f} rewards={rewards_str}"
     )
 
 

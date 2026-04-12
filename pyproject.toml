@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openENV"
+version = "1.0.0"
+description = "Adaptive curriculum learning environment"
+authors = [{name = "OpenEnv Team"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pydantic",
+    "openenv-core>=0.2.0",
+    "openenv",
+]
+
+[project.scripts]
+server = "server.app:main"
+
+[project.urls]
+Homepage = "https://github.com/ruchikesha19/openENV"
+Repository = "https://github.com/ruchikesha19/openENV"

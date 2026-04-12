@@ -2,3 +2,7 @@ numpy
 pydantic
 openai
 python-dotenv
+openenv
+openenv-core
+uvicorn
+fastapi
