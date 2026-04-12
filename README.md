@@ -1,3 +1,18 @@
+# OpenEnv - Adaptive Learning Environment
+
+## Installation
+```bash
+pip install -r requirements.txt
+uv sync  # This generates uv.lock
+```
+
+## Validation
+```bash
+openenv validate
+```
+
+---
+
 # Adaptive Learning Agent (OpenEnv)
 
 An **Agentic AI system using Reinforcement Learning** that dynamically personalizes learning paths for students based on their performance, engagement, and behavior.
